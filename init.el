@@ -17,9 +17,6 @@ There are two things you can do about this warning:
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
-;;disable annoying bell
-(setq ring-bell-function 'ignore)
-
 ;;hide/show things
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -28,9 +25,12 @@ There are two things you can do about this warning:
 (show-paren-mode t)
 (global-hl-line-mode t)
 (global-visual-line-mode 1)
+(setq ring-bell-function 'ignore)
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+(setq mode-require-final-newline t)
 (fringe-mode 16)
 (winner-mode t)
+
 
 ;;save state
 (desktop-save-mode t)
@@ -49,7 +49,7 @@ There are two things you can do about this warning:
     ("85286ccba3ccaa775f99890fe93b0dc4963a42c41f25ef409edecd6a8f8652b3" "75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
  '(package-selected-packages
    (quote
-    (web-mode tide js2-mode company company-mode diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
+    (flx ivy ivy-mode editorconfig company-quickhelp smartparens web-mode tide js2-mode company company-mode diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
  '(tool-bar-mode nil))
 
 (custom-set-faces
@@ -118,7 +118,59 @@ There are two things you can do about this warning:
 	(magit-post-refresh . diff-hl-magit-post-refresh))
   :config (global-diff-hl-mode t))
 
+(use-package smartparens
+  :ensure t
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode))
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+(use-package ivy
+  :ensure t
+  :init (setq ivy-initial-inputs-alist nil)
+  :custom (ivy-use-virtual-buffers t)
+  :config (ivy-mode 1)
+  (use-package flx
+    :ensure t))
+
 ;;==========LANGUAGES==========;;
+;;utils
+(use-package company
+  :ensure t
+  :custom
+  (company-require-match nil)
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.2)
+  (company-tooltip-align-annotation t)
+  (company-frontends '(company-pseudo-tooltip-frontend
+		               company-echo-metadata-frontend))
+  :commands (company-mode global-company-mode company-complete
+                          company-complete-common company-manual-begin
+                          company-grab-line)
+  :bind (
+         :map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :hook ((prog-mode . company-mode)
+         (comint-mode . company-mode)))
+
+(use-package company-quickhelp
+  :ensure t
+  :after company
+  :commands (company-quickhelp-mode)
+  :init
+  (company-quickhelp-mode 1)
+  (use-package pos-tip
+    :commands (pos-tip-show)))
+
+(use-package flycheck
+  :ensure t
+  :init(global-flycheck-mode))
+
 ;; JavaScript and TypeScript
 (use-package js2-mode
   :ensure t
