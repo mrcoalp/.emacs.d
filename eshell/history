@@ -1,0 +1,20 @@
+cd ..
+cd ,,
+cd ../../..
+ls
+npm run dist
+~use-theme~
+use-theme
+use-theme powerline
+cd ../../Users/Utilizador/Documents/WEB/ggwebstore_beanstalk/
+use-theme
+use-theme git-radar
+cd app
+cd src/
+cd app/
+cd components/profile/
+ls
+find-file profile.component.ts
+use-theme
+cd c:
+ls
