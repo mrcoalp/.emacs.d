@@ -49,7 +49,7 @@ There are two things you can do about this warning:
     ("85286ccba3ccaa775f99890fe93b0dc4963a42c41f25ef409edecd6a8f8652b3" "75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
  '(package-selected-packages
    (quote
-    (diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
+    (web-mode tide js2-mode company company-mode diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
  '(tool-bar-mode nil))
 
 (custom-set-faces
@@ -117,3 +117,24 @@ There are two things you can do about this warning:
   :hook((dired-mode . diff-hl-dired-mode)
 	(magit-post-refresh . diff-hl-magit-post-refresh))
   :config (global-diff-hl-mode t))
+
+;;==========LANGUAGES==========;;
+;; JavaScript and TypeScript
+(use-package js2-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-formater-before-save)))
+
+(use-package web-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-mode))
+  (setq web-mode-enable-current-element-highlight t))
