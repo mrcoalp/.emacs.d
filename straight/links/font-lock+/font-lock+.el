@@ -1,1 +1,0 @@
-c:/Users/Utilizador/AppData/Roaming/.emacs.d/straight/repos/font-lock-plus/font-lock+.el

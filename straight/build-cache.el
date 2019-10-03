@@ -3,7 +3,7 @@
 
 "26.3"
 
-#s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ("straight" ("2019-10-03 11:59:57" ("emacs") (:type git :host github :repo "raxod502/straight.el" :files ("straight*.el") :branch "master" :package "straight" :local-repo "straight.el")) "org-elpa" ("2019-10-03 11:59:57" nil (:local-repo nil :package "org-elpa" :type git)) "font-lock+" ("2019-10-03 11:33:57" nil (:host github :repo "emacsmirror/font-lock-plus" :package "font-lock+" :type git :local-repo "font-lock-plus"))))
+#s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ("straight" ("2019-10-03 12:28:07" ("emacs") (:type git :host github :repo "raxod502/straight.el" :files ("straight*.el") :branch "master" :package "straight" :local-repo "straight.el")) "org-elpa" ("2019-10-03 12:28:07" nil (:local-repo nil :package "org-elpa" :type git))))
 
 #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ("straight" ((straight straight-x straight-autoloads) (autoload (quote straight-get-recipe) "straight" "Interactively select a recipe from one of the recipe repositories.
 All recipe repositories in `straight-recipe-repositories' will
@@ -258,7 +258,7 @@ according to the value of `straight-profiles'.
 
 (fn &optional FORCE)" t nil) (autoload (quote straight-thaw-versions) "straight" "Read version lockfiles and restore package versions to those listed.
 
-(fn)" t nil) (if (fboundp (quote register-definition-prefixes)) (register-definition-prefixes "straight" (quote ("straight-")))) (defvar straight-x-pinned-packages nil "List of pinned packages.") (if (fboundp (quote register-definition-prefixes)) (register-definition-prefixes "straight-x" (quote ("straight-x-")))) (provide (quote straight-autoloads))) "font-lock+" ((font-lock+ font-lock+-autoloads) (if (fboundp (quote register-definition-prefixes)) (register-definition-prefixes "font-lock+" (quote ("font-lock-" "put-text-property-unless-ignore")))) (provide (quote font-lock+-autoloads)))))
+(fn)" t nil) (if (fboundp (quote register-definition-prefixes)) (register-definition-prefixes "straight" (quote ("straight-")))) (defvar straight-x-pinned-packages nil "List of pinned packages.") (if (fboundp (quote register-definition-prefixes)) (register-definition-prefixes "straight-x" (quote ("straight-x-")))) (provide (quote straight-autoloads)))))
 
 #s(hash-table size 65 test eq rehash-size 1.5 rehash-threshold 0.8125 data ())
 

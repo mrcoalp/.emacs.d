@@ -59,7 +59,7 @@ There are two things you can do about this warning:
  '(custom-enabled-themes (quote (nimbus)))
  '(custom-safe-themes
    (quote
-    ("75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
+    ("85286ccba3ccaa775f99890fe93b0dc4963a42c41f25ef409edecd6a8f8652b3" "75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
  '(package-selected-packages
    (quote
     (use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
