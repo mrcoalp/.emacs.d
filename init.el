@@ -17,20 +17,6 @@ There are two things you can do about this warning:
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
-;;init straight
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
 ;;disable annoying bell
 (setq ring-bell-function 'ignore)
 
@@ -44,6 +30,7 @@ There are two things you can do about this warning:
 (global-visual-line-mode 1)
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 (fringe-mode 16)
+(winner-mode t)
 
 ;;save state
 (desktop-save-mode t)
@@ -62,7 +49,7 @@ There are two things you can do about this warning:
     ("85286ccba3ccaa775f99890fe93b0dc4963a42c41f25ef409edecd6a8f8652b3" "75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
  '(package-selected-packages
    (quote
-    (use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
+    (diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
  '(tool-bar-mode nil))
 
 (custom-set-faces
@@ -72,9 +59,15 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#2d3743" :foreground "#e1e1e0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "outline" :family "FuraCode NF")))))
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
 ;;powerline
-(require 'powerline)
-(powerline-default-theme)
+(use-package powerline
+  :ensure t
+  :config(powerline-default-theme))
 
 ;;show line numbers in left side
 (when (version<= "26.0.50" emacs-version )
@@ -84,15 +77,43 @@ There are two things you can do about this warning:
 (set-language-environment "UTF-8")
 
 ;;load nimbus theme
-(require 'nimbus-theme)
-(load-theme 'nimbus t)
+(use-package nimbus-theme
+  :ensure t
+  :config(load-theme 'nimbus t))
 
 ;;set eshell theme
-(require 'eshell-git-prompt)
-(eshell-git-prompt-use-theme 'git-radar)
+(use-package eshell-git-prompt
+  :ensure t
+  :config(eshell-git-prompt-use-theme 'git-radar))
 
 ;;dired icons
-(require 'all-the-icons)
-(require 'all-the-icons-dired)
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+(use-package all-the-icons
+  :ensure t)
+(use-package all-the-icons-dired
+  :ensure t
+  :after all-the-icons
+  :init(add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 (setq inhibit-compacting-font-caches t)
+
+;;which key helps listing key combs
+(use-package which-key
+  :ensure t
+  :config(which-key-mode))
+
+;;mode icons
+(use-package mode-icons
+  :ensure t
+  :config(mode-icons-mode))
+
+;;magit
+(use-package magit
+  :ensure t
+  :commands (magit-status)
+  :bind(("C-x g" . magit-status)))
+
+;;diff-hl
+(use-package diff-hl
+  :ensure t
+  :hook((dired-mode . diff-hl-dired-mode)
+	(magit-post-refresh . diff-hl-magit-post-refresh))
+  :config (global-diff-hl-mode t))
