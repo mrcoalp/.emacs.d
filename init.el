@@ -36,29 +36,7 @@ There are two things you can do about this warning:
 (desktop-save-mode t)
 (save-place-mode t)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(custom-enabled-themes (quote (nimbus)))
- '(custom-safe-themes
-   (quote
-    ("85286ccba3ccaa775f99890fe93b0dc4963a42c41f25ef409edecd6a8f8652b3" "75cce15f30f64af33ba3f3f987861b26eb78f9d264f51d69aa0578d5bf618c9d" default)))
- '(package-selected-packages
-   (quote
-    (flycheck yasnippet-snippets ggtags yasnippet flx ivy ivy-mode editorconfig company-quickhelp smartparens web-mode tide js2-mode company company-mode diff-hl magit mode-icons which-key use-package all-the-icons all-the-icons-dired eshell-git-prompt nimbus-theme typescript-mode)))
- '(tool-bar-mode nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#2d3743" :foreground "#e1e1e0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "outline" :family "FuraCode NF")))))
-
+;;initialize use package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -69,6 +47,11 @@ There are two things you can do about this warning:
   :ensure t
   :config(powerline-default-theme))
 
+;;doom-modeline (instead of powerline)
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :hook (after-init . doom-modeline-mode))
+
 ;;show line numbers in left side
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
@@ -76,10 +59,27 @@ There are two things you can do about this warning:
 ;; UTF-8 as default encoding
 (set-language-environment "UTF-8")
 
-;;load nimbus theme
-(use-package nimbus-theme
-  :ensure t
-  :config(load-theme 'nimbus t))
+;;themes
+(set-frame-font "FuraCode NF 10" nil t)
+
+;; (use-package nimbus-theme
+;;   :ensure t
+;;   :init(load-theme 'nimbus t))
+
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :init(load-theme 'zenburn t))
+
+;; (use-package solarized-theme
+;;   :ensure t
+;;   :init(load-theme 'solarized-dark t))
+
+(use-package spacemacs-common
+  :ensure spacemacs-theme
+  :custom
+  (spacemacs-theme-comment-bg nil)
+  (spacemacs-theme-comment-italic t)
+  :config (load-theme 'spacemacs-dark t))
 
 ;;set eshell theme
 (use-package eshell-git-prompt
@@ -115,7 +115,7 @@ There are two things you can do about this warning:
 (use-package diff-hl
   :ensure t
   :hook((dired-mode . diff-hl-dired-mode)
-	(magit-post-refresh . diff-hl-magit-post-refresh))
+	(magit-post-refresh-hook . diff-hl-magit-post-refresh))
   :config (global-diff-hl-mode t))
 
 (use-package smartparens
@@ -170,7 +170,45 @@ There are two things you can do about this warning:
 ;;checks for errors
 (use-package flycheck
   :ensure t
-  :init(global-flycheck-mode))
+  :config (global-flycheck-mode 1)
+  :init
+  (progn
+    (define-fringe-bitmap 'my-flycheck-fringe-indicator
+      (vector #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00011100
+              #b00111110
+              #b00111110
+              #b00111110
+              #b00011100
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000))
+
+    (flycheck-define-error-level 'error
+      :severity 2
+      :overlay-category 'flycheck-error-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-error)
+
+    (flycheck-define-error-level 'warning
+      :severity 1
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-warning)
+
+    (flycheck-define-error-level 'info
+      :severity 0
+      :overlay-category 'flycheck-info-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-info)))
 
 ;;snippets
 (use-package yasnippet
