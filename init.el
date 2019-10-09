@@ -48,15 +48,16 @@ There are two things you can do about this warning:
   (package-install 'use-package))
 (require 'use-package)
 
-;;powerline
-(use-package powerline
-  :ensure t
-  :config(powerline-default-theme))
+;; ;;powerline
+;; (use-package powerline
+;;   :ensure t
+;;   :config(powerline-default-theme))
 
 ;;doom-modeline (instead of powerline)
-;; (use-package doom-modeline
-;;   :ensure t
-;;   :hook (after-init . doom-modeline-mode))
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode)
+  :config(setq doom-modeline-buffer-file-name-style 'file-name))
 
 ;;show line numbers in left side
 (when (version<= "26.0.50" emacs-version )
