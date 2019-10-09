@@ -1,3 +1,9 @@
+;;; init.el --- Initialization file for Emacs
+
+;;; Commentary:
+;;Emacs Startup File --- initialization for Emacs
+
+;;; Code:
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -60,7 +66,11 @@ There are two things you can do about this warning:
 (set-language-environment "UTF-8")
 
 ;;themes
-(set-frame-font "FuraCode NF 10" nil t)
+;;change font name based on system
+(if (string-equal system-type "windows-nt")
+    (set-frame-font "FuraCode NF 10" nil t)
+  (set-frame-font "FuraCode Nerd Font 10" nil t))
+    
 
 ;; (use-package nimbus-theme
 ;;   :ensure t
@@ -85,6 +95,10 @@ There are two things you can do about this warning:
 (use-package eshell-git-prompt
   :ensure t
   :config(eshell-git-prompt-use-theme 'git-radar))
+
+;;ensure org-mode
+(use-package org
+  :ensure t)
 
 ;;dired icons
 (use-package all-the-icons
@@ -210,6 +224,26 @@ There are two things you can do about this warning:
       :fringe-bitmap 'my-flycheck-fringe-indicator
       :fringe-face 'flycheck-fringe-info)))
 
+;;clang
+(use-package clang-format
+  :ensure t
+  :init (fset 'c-indent-region 'clang-format-region))
+
+;;require cc-mode to prevent warning in c++-mode-map
+(use-package cc-mode
+  :ensure t)
+
+(defun clang-format-region-google (s e)
+  "Indent region with provided options.  (S, E)."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point) (point))))
+  (clang-format-region s e "{BasedOnStyle: Google, IndentWidth: 4, SpacesBeforeTrailingComments: 3, DerivePointerAlignment: false, PointerAlignment: Left, ColumnLimit: 0}"))
+
+;;define c++ indent to Ctrl-F10
+(define-key c++-mode-map (kbd "C-<f10>") #'clang-format-region-google)
+
 ;;snippets
 (use-package yasnippet
   :ensure t
@@ -246,3 +280,6 @@ There are two things you can do about this warning:
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-mode))
   (setq web-mode-enable-current-element-highlight t))
+
+(provide 'init)
+;;; init.el ends here
