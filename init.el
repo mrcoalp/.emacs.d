@@ -152,6 +152,18 @@ There are two things you can do about this warning:
   (use-package flx
     :ensure t))
 
+(use-package dockerfile-mode
+  :ensure t
+  :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
+
+(use-package yaml-mode
+  :ensure t
+  :init (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
+
+(add-hook 'yaml-mode-hook
+      '(lambda ()
+        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
 ;;==========LANGUAGES==========;;
 ;;utils
 (use-package company
